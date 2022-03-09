@@ -1,0 +1,207 @@
+﻿<Window x:Class="Builder.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Builder"
+        mc:Ignorable="d" MinHeight="720" MinWidth="710"
+        Title="Builder" Height="720" Width="710">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.Resources>
+            <Style TargetType="Button">
+                <Setter Property="Content" Value="选择"/>
+                <Setter Property="Margin" Value="8,0,8,8"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="Padding" Value="10,1"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+            </Style>
+            <Style TargetType="Border">
+                <Setter Property="BorderBrush" Value="Gray"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Margin" Value="14"/>
+            </Style>
+        </Grid.Resources>
+
+        <Border Grid.Row="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="0.8*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Grid.Resources>
+                    <Style TargetType="Label">
+                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="FontSize" Value="12"/>
+                    </Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="TextAlignment" Value="Left"/>
+                        <Setter Property="Padding" Value="4"/>
+                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="IsReadOnly" Value="True"/>
+                        <Setter Property="Margin" Value="8"/>
+                    </Style>
+                    <Style TargetType="ListBox">
+                        <Setter Property="Padding" Value="4"/>
+                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="Margin" Value="8"/>
+                        <Setter Property="MinHeight" Value="25"/>
+                    </Style>
+                </Grid.Resources>
+
+                <Label Content="Unity执行文件"
+                       Grid.Row="0" Grid.Column="0"/>
+                <TextBox Grid.Row="0" Grid.Column="1"
+                         Text="{Binding Path=UnityExePath, Mode=OneWay}"
+                         x:Name="tbxUnityExePath"/>
+                <Button Grid.Row="1" Grid.Column="1"
+                        Name="btnSelectUnityExe"
+                        Click="BtnSelectUnityExe_Click"/>
+
+                <Label Content="工程文件根目录"
+                       Grid.Row="2" Grid.Column="0"/>
+                <TextBox Grid.Row="2" Grid.Column="1"
+                         Text="{Binding Path=UnityProjPath, Mode=OneWay}"
+                         Name="tbxUnityProjPath"/>
+                <Button Grid.Row="3" Grid.Column="1"
+                        Name="btnSelectProjDir"
+                        Click="BtnSelectProjPath_Click"/>
+
+                <Label Grid.Row="4" Grid.Column="0"
+                       Content="场景文件"/>
+                <ListBox ItemsSource="{Binding Path=UnitySceneFiles}"
+                         Name="lbxSceneFiles"
+                         Grid.Row="4" Grid.RowSpan="2" Grid.Column="2"/>
+                <Button Content="选择"
+                        Name="btnSelectUnityScenes"
+                        Grid.Column="2" Grid.Row="6" Click="BtnSelectUnityScenes_Click"/>
+
+                <!--输出路径-->
+                <Label Content="输出路径"
+                       Grid.Row="7" Grid.Column="0"/>
+                <TextBox Grid.Row="7" Grid.Column="1"
+                         Text="{Binding Path=UnityOutputPath, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <CheckBox Content="自动创建子文件夹"
+                          x:Name="IfAutoCreateSubfolder"
+                          ToolTip="是否生成以构建时间为后缀的子文件夹并将构建文件置于其中"
+                          Grid.Row="8" Grid.Column="1"
+                          Margin="8,0"
+                          FontSize="14"
+                          IsChecked="False"/>
+                <Button x:Name="btnSelectOutputPath"
+                        Grid.Row="8" Grid.Column="1"
+                        Click="BtnSelectOutputPath_Click"/>
+            </Grid>
+        </Border>
+
+        <!--附加选项-->
+        <Border Grid.Row="1" Margin="14,0">
+            <Expander Header="附加选项"
+                      Margin="14"
+                      IsExpanded="True"
+                      HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                <!--VDF文件-->
+                <StackPanel Orientation="Vertical">
+                    <DockPanel>
+                        <Label Content="描述文本"/>
+                        <TextBox Margin="8,0"
+                                 TextWrapping="Wrap"
+                                 Text="{Binding Path=VdfDesc, Mode=OneWayToSource}"
+                                 HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                        
+                    </DockPanel>
+                    <DockPanel LastChildFill="True">
+                        <Label Content="VDF文件" VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding Path=VdfFilePath, Mode=OneWay}"
+                                 Name="tbxVdfFile"
+                                 IsReadOnly="True"
+                                 Margin="8"
+                                 HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                    </DockPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button x:Name="btnSelectVdfFile" Click="BtnSelectVdfFile_Click"/>
+                        <Button Name="btnClearVdfFile"
+                                Content="清除" Click="BtnClearVdfFile_Click"/>
+                    </StackPanel>
+
+                    <!--脚本文件-->
+                    <DockPanel LastChildFill="True">
+                        <Label Content="脚本文件" VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding Path=AdditionalBatFile, Mode=OneWay}"
+                                 Margin="8"
+                                 IsReadOnly="True"
+                                 HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                    </DockPanel>
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Right">
+                        <Button Name="btnAdditionalBat"
+                                Click="BtnAdditionalBat_Click"
+                                HorizontalAlignment="Right"/>
+                        <Button Content="清除"
+                                Name="btnClearAdditionBat"
+                                Click="BtnClearAdditionBat_Click"/>
+                        <Button Content="运行"
+                                Name="btnRunAdditionBat"
+                                IsEnabled="{Binding Path=IsNotRunning, Mode=OneWay}"
+                                HorizontalAlignment="Center" Click="BtnRunAdditionBat_Click"/>
+                    </StackPanel>
+                </StackPanel>
+            </Expander>
+        </Border>
+
+        <Grid Grid.Row="2" Grid.Column="4" Margin="7">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" MinHeight="120"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBox Name="tbxInfo"
+                     Background="AliceBlue"
+                     AcceptsReturn="True" TextWrapping="Wrap"
+                     IsReadOnly="true"
+                     VerticalScrollBarVisibility="Auto"
+                     Margin="8" Padding="7"/>
+            <StackPanel Grid.Row="1"
+                        Orientation="Horizontal" HorizontalAlignment="Center"
+                        Margin="14,0">
+                <Button Content="构建 Win64 版本"
+                        Name="btnBuild"
+                        IsEnabled="{Binding Path=IsNotRunning, Mode=OneWay}"
+                        Click="BtnBuild_Click"/>
+                <Button Content="打开输出路径"
+                        Name="btnOpenOutputDir"
+                        Click="BtnOpenOutputDir_Click"/>
+                <Button Content="Git Pull"
+                        Name="btnGitPull"
+                        IsEnabled="{Binding Path=IsNotRunning, Mode=OneWay}"
+                        Click="BtnGitPull_Click"/>
+                <!--<Button Content="TEST"
+                        Name="btnTest"
+                        Click="BtnTest_Click"/>-->
+                <!--<CheckBox Content="监视 Git 自动构建"
+                          Name="cbxWatchGit"
+                          Checked="CbxWatchGit_Checked"
+                          Unchecked="CbxWatchGit_Unchecked"/>-->
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
